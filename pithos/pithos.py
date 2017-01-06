@@ -87,12 +87,12 @@ class CellRendererAlbumArt(Gtk.CellRenderer):
             ctx.paint()
 
 class PlayerStatus:
-  def __init__(self):
-    self.reset()
+    def __init__(self):
+        self.reset()
 
-  def reset(self):
-    self.began_buffering = None
-    self.buffer_percent = 0
+    def reset(self):
+        self.began_buffering = None
+        self.buffer_percent = 0
 
 
 @GtkTemplate(ui='/io/github/Pithos/ui/PithosWindow.ui')
@@ -105,6 +105,7 @@ class PithosWindow(Gtk.ApplicationWindow):
         "user-changed-play-state": (GObject.SignalFlags.RUN_FIRST, None, (GObject.TYPE_BOOLEAN,)),
         "metadata-changed": (GObject.SignalFlags.RUN_FIRST, None, (GObject.TYPE_PYOBJECT,)),
         "buffering-finished": (GObject.SignalFlags.RUN_FIRST, None, (GObject.TYPE_PYOBJECT,)),
+        "exiting": (GObject.SignalFlags.RUN_FIRST, None, (GObject.TYPE_BOOLEAN,)),
     }
 
     volume = GtkTemplate.Child()
@@ -1130,6 +1131,7 @@ class PithosWindow(Gtk.ApplicationWindow):
 
     def quit(self, widget=None, data=None):
         """quit - signal handler for closing the PithosWindow"""
+        self.emit('exiting', self)
         Gio.Application.get_default().quit()
 
     @GtkTemplate.Callback
